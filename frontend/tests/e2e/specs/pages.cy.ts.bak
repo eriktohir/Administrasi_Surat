@@ -1,0 +1,63 @@
+describe('Automated page verification for TUUD application', () => {
+  const loginViaLocalStorage = () => {
+    cy.visit('/dashboard', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('token', 'test-token');
+      }
+    });
+  };
+
+  const assertTableHeaders = (expectedHeaders: string[]) => {
+    cy.get('table.tuud-table thead tr th')
+      .should('have.length', expectedHeaders.length)
+      .then(($ths) => {
+        const actualHeaders = Array.from($ths, (th) => th.textContent?.trim());
+        expect(actualHeaders).to.deep.equal(expectedHeaders);
+      });
+  };
+
+  beforeEach(() => {
+    cy.clearLocalStorage();
+  });
+
+  it('loads Surat Masuk page and shows the correct columns', () => {
+    cy.visit('/surat-masuk', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('token', 'test-token');
+      }
+    });
+    cy.url().should('include', '/surat-masuk');
+    assertTableHeaders(['No', 'No. Surat', 'Asal Surat', 'Perihal', 'Tanggal', 'Dokumen', 'Aksi']);
+  });
+
+  it('loads Surat Keluar page and shows the correct columns', () => {
+    cy.visit('/surat-keluar', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('token', 'test-token');
+      }
+    });
+    cy.url().should('include', '/surat-keluar');
+    assertTableHeaders(['No', 'No. Surat', 'Tujuan Surat', 'Perihal', 'Tanggal', 'Dokumen', 'Aksi']);
+  });
+
+  it('loads Disposisi page and shows the correct columns', () => {
+    cy.visit('/disposisi', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('token', 'test-token');
+      }
+    });
+    cy.url().should('include', '/disposisi');
+    assertTableHeaders(['No', 'ID Surat Masuk', 'Diteruskan Kepada', 'Instruksi / Catatan', 'Tanggal Disposisi', 'Status', 'Aksi']);
+  });
+
+  it('loads Arsip page and hides the Tambah button', () => {
+    cy.visit('/arsip', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('token', 'test-token');
+      }
+    });
+    cy.url().should('include', '/arsip');
+    cy.contains('ion-button', 'Tambah').should('not.exist');
+    assertTableHeaders(['No', 'No. Surat', 'Jenis', 'Asal / Tujuan', 'Perihal', 'Tanggal Arsip', 'Aksi']);
+  });
+});

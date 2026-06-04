@@ -1,0 +1,15 @@
+:root {
+  --ion-background-color: #F5F5F5;
+  --ion-toolbar-background: #C0C0C0;
+  --ion-toolbar-color: #2C2C2C;
+  --ion-color-primary: #D4AF37;
+  --ion-color-primary-contrast: #2C2C2C;
+}
+ion-toolbar {
+  --border-color: #D4AF37;
+  --border-width: 0 0 2px 0;
+}
+.app-title {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
